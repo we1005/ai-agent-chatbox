@@ -1,0 +1,37 @@
+# Netlify 配置 · /home 独立部署（形态 B）
+#
+# 用法：
+#   1) 本地构建：cd frontend && npm run build:home
+#   2) 部署：netlify deploy --prod --dir=frontend/dist-home
+#
+# 这份配置同时也支持 Netlify 连 GitHub 自动部署（如果以后想切到方式 1）：
+#   build / publish 字段已经写好；Netlify 会按这里的命令构建。
+
+[build]
+  base = "frontend"
+  command = "npm run build:home"
+  publish = "dist-home"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# SPA 路由 fallback：所有路径都回到 index.html，由前端 vue-router catch-all 接管。
+# 这样访客刷新任意路径都能看到落地页（main.home.ts 里 router 是 catch-all）。
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# 安全/性能 headers
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# 静态资源长缓存（assets 带 hash，可放心 immutable）
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"

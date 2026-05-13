@@ -1,0 +1,32 @@
+log_level: INFO
+
+storage:
+  storage_path: "/Users/admin/Desktop/personal/langchain-rag-knowledge-base-chatbox/backend/Qdrant-config-data/storage"
+  snapshots_path: "/Users/admin/Desktop/personal/langchain-rag-knowledge-base-chatbox/backend/Qdrant-config-data/snapshots"
+
+  on_disk_payload: true
+
+  performance:
+    max_search_threads: 0
+    optimizer_cpu_budget: 0
+
+  hnsw_index:
+    m: 16
+    ef_construct: 100
+    max_indexing_threads: 0
+    on_disk: false
+
+service:
+  host: 0.0.0.0
+  http_port: 6333
+  grpc_port: 6334
+  max_request_size_mb: 32
+  max_workers: 0
+  enable_cors: true
+
+  static_content_dir: "/Users/admin/Desktop/personal/langchain-rag-knowledge-base-chatbox/backend/Qdrant-config-data/static"
+
+cluster:
+  enabled: false
+
+telemetry_disabled: true

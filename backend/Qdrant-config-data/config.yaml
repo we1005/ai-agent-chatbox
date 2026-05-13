@@ -1,0 +1,36 @@
+log_level: INFO
+
+storage:
+  # 使用绝对路径，避免 Windows 下相对路径解析错误
+  storage_path: "D:\\FastAPI-chatbox-langraph-version\\backend\\Qdrant-config-data\\storage"
+  snapshots_path: "D:\\FastAPI-chatbox-langraph-version\\backend\\Qdrant-config-data\\snapshots"
+
+  # payload 存磁盘而非内存，大幅节省 RAM
+  on_disk_payload: true
+
+  performance:
+    # 0 = 自动使用所有 CPU 核心
+    max_search_threads: 0
+    optimizer_cpu_budget: 0
+
+  hnsw_index:
+    m: 16
+    ef_construct: 100
+    max_indexing_threads: 0
+    on_disk: false
+
+service:
+  host: 0.0.0.0
+  http_port: 6333
+  grpc_port: 6334
+  max_request_size_mb: 32
+  max_workers: 0
+  enable_cors: true
+
+  # Web UI 静态文件目录
+  static_content_dir: "D:\\FastAPI-chatbox-langraph-version\\backend\\Qdrant-config-data\\static"
+
+cluster:
+  enabled: false
+
+telemetry_disabled: true

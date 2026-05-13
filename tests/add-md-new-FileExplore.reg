@@ -1,0 +1,21 @@
+Windows Registry Editor Version 5.00
+
+[HKEY_CLASSES_ROOT\.md]
+@="Typora.md"
+"Content Type"="text/markdown"
+
+[HKEY_CLASSES_ROOT\.md\ShellNew]
+"NullFile"=""
+
+[HKEY_CLASSES_ROOT\Typora.md]
+@="Markdown 文档"
+
+[HKEY_CLASSES_ROOT\Typora.md\DefaultIcon]
+@="D:\\Typora\\Typora.exe,0"
+
+[HKEY_CLASSES_ROOT\Typora.md\shell]
+
+[HKEY_CLASSES_ROOT\Typora.md\shell\open]
+
+[HKEY_CLASSES_ROOT\Typora.md\shell\open\command]
+@="\"D:\\Typora\\Typora.exe\" \"%1\""

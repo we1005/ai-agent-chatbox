@@ -1,0 +1,14 @@
+{
+  "seed": 42,
+  "total_queries": 60,
+  "total_unique_docs": 118,
+  "category_distribution": {
+    "single_hop": 15,
+    "multi_hop_2": 15,
+    "multi_hop_3": 15,
+    "partial_context": 10,
+    "kb_absent": 5
+  },
+  "source": "https://raw.githubusercontent.com/IAAR-Shanghai/CRUD_RAG/main/data/crud_split/split_merged.json",
+  "generated_at": "2026-04-22T15:14:38"
+}

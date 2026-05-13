@@ -1,0 +1,68 @@
+# 玄鉴 · Celery worker + Flower 监控
+#
+# 前提：
+#   1. 宿主机 Redis 已启动（brew services start redis + AOF 已开启）
+#   2. 宿主机 backend 已启动（uvicorn main:app）
+#
+# 启动：cd backend && docker compose -f docker-compose.celery.yml up -d
+# 停止：cd backend && docker compose -f docker-compose.celery.yml down
+# 日志：docker logs xuanjian-celery-worker -f
+# 监控：打开 http://localhost:5555 (账号 admin / 密码 xuanjian)
+#
+# 架构：两个容器都连宿主机 Redis (host.docker.internal:6379)；
+# worker 又通过 host.docker.internal:8000 回调 backend 做向量化。
+
+services:
+  celery-worker:
+    container_name: xuanjian-celery-worker
+    build:
+      context: .
+      dockerfile: Dockerfile.celery
+    restart: unless-stopped
+    extra_hosts:
+      # Linux 需要显式映射；Mac/Win Docker Desktop 原生支持 host.docker.internal
+      - "host.docker.internal:host-gateway"
+    environment:
+      CELERY_BROKER_URL: "redis://host.docker.internal:6379/0"
+      CELERY_RESULT_BACKEND: "redis://host.docker.internal:6379/1"
+      BACKEND_URL: "http://host.docker.internal:8000"
+      # Python 日志不带颜色，便于 docker logs
+      PYTHONUNBUFFERED: "1"
+    # 代码挂 volume 便于开发时改 task 不重 build
+    volumes:
+      - ./app/workers:/app/app/workers:ro
+    mem_limit: 512m
+    # 开发环境：代码变动自动重载（生产可去掉 watchdog）
+    command:
+      - celery
+      - -A
+      - app.workers.celery_app
+      - worker
+      - --concurrency=2
+      - --loglevel=info
+      - -Q
+      - xuanjian.vectorize
+
+  flower:
+    container_name: xuanjian-celery-flower
+    image: mher/flower:2.0
+    restart: unless-stopped
+    ports:
+      - "5555:5555"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      CELERY_BROKER_URL: "redis://host.docker.internal:6379/0"
+      CELERY_RESULT_BACKEND: "redis://host.docker.internal:6379/1"
+      # Basic Auth：admin / xuanjian（仅本机访问，不需要强密码）
+      FLOWER_BASIC_AUTH: "admin:xuanjian"
+    command:
+      - celery
+      - --broker=redis://host.docker.internal:6379/0
+      - flower
+      - --port=5555
+      - --url_prefix=
+      - --basic_auth=admin:xuanjian
+    depends_on:
+      - celery-worker
+    mem_limit: 256m

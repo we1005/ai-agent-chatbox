@@ -1,0 +1,105 @@
+/*
+ * Tailwind v4 入口 —— 只加载 utilities + theme，**刻意跳过 Preflight**。
+ *
+ * 为什么跳过 Preflight：
+ *   Tailwind 的 Preflight（@import "tailwindcss" 默认带的 base.css）会
+ *   reset 掉所有 h1/h2/button/ul/a 等元素的浏览器默认样式。本项目深度使用
+ *   Element Plus，部分 el-* 组件间接依赖浏览器默认样式；如果启用 Preflight，
+ *   现有 /（Chat）、/knowledge、/admin 等页面的视觉可能被意外顶掉。
+ *
+ *   shadcn-vue 的组件（@/components/ui/*）通过 utility class 显式定义
+ *   box-sizing / padding / bg-color / border，不依赖 Preflight 清零就能工作。
+ *   2026-04 把 /（Chat）的外框 + ConfigPanel 从 Element Plus 迁到 shadcn-vue 时
+ *   验证了这一点。
+ *
+ * 详细设计见 frontend/DESIGN.md（由 `npx -y getdesign add linear.app` 生成）。
+ */
+
+@layer theme, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/utilities.css" layer(utilities);
+
+/*
+ * Linear 设计 token（映射自 DESIGN.md §2 Color Palette & Roles）。
+ * 所有下面 --color-linear-* 都可在 utility 类里直接用：bg-linear-panel / text-linear-text-primary 等。
+ */
+@theme {
+  /* 深色背景层（从深到浅） */
+  --color-linear-bg-black: #08090a;
+  --color-linear-panel: #0f1011;
+  --color-linear-surface: #191a1b;
+  --color-linear-surface-raised: #28282c;
+
+  /* 文本层次（从主到弱） */
+  --color-linear-text-primary: #f7f8f8;
+  --color-linear-text-secondary: #d0d6e0;
+  --color-linear-text-tertiary: #8a8f98;
+  --color-linear-text-quaternary: #62666d;
+
+  /* 品牌 accent */
+  --color-linear-indigo: #5e6ad2;
+  --color-linear-violet: #7170ff;
+  --color-linear-violet-hover: #828fff;
+
+  /* 状态色 */
+  --color-linear-green: #27a644;
+  --color-linear-emerald: #10b981;
+
+  /* 实色边框（在深背景上可见） */
+  --color-linear-border-solid: #23252a;
+  --color-linear-border-alt: #34343a;
+
+  /* 字体家族 */
+  --font-sans: 'Inter', 'Inter Variable', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Helvetica Neue', sans-serif;
+  --font-mono: 'Berkeley Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ── ChatGPT 设计 token（frontend/DESIGN-chatgpt.md）──
+     浅色模式、chrome 隐形、内容优先；与 Linear token 并存，
+     StyleLab 使用前缀 gpt-* 引用，避免混用。 */
+
+  /* Surfaces */
+  --color-gpt-canvas: #ffffff;           /* 主画布 */
+  --color-gpt-sidebar: #f9f9f9;          /* 侧栏底色 */
+  --color-gpt-hover: #f4f4f4;            /* 按钮 / 项 hover */
+  --color-gpt-user-bubble: #f4f4f4;      /* 用户消息气泡 */
+
+  /* Text */
+  --color-gpt-text-primary: #0d0d0d;     /* 主文本，比纯黑略柔 */
+  --color-gpt-text-secondary: #676767;   /* 正文辅助 */
+  --color-gpt-text-tertiary: #8e8ea0;    /* 元数据、时间戳 */
+
+  /* Borders */
+  --color-gpt-border: #e5e5e5;           /* 默认边框 */
+
+  /* Accent（极克制） */
+  --color-gpt-teal: #10a37f;             /* OpenAI 品牌绿，仅 upgrade/success */
+
+  /* ── shadcn-vue 语义 token（浅色 Neutral 主题；与 Claude 米色风格兼容） ──
+     2026-04 新增。约定：bg-background / text-foreground / border-border
+     / bg-primary / ring-ring 都是 shadcn-vue 组件期望的 token。
+     为了不破坏现有 el-* 页面，这些 token 仅作为 utility class 生效，
+     不作全局 body 背景。见 components/ui/* 里的使用。*/
+  --color-background: oklch(1 0 0);                      /* 纯白 */
+  --color-foreground: oklch(0.15 0 0);                   /* 接近黑 */
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.15 0 0);
+  --color-popover: oklch(1 0 0);
+  --color-popover-foreground: oklch(0.15 0 0);
+  --color-primary: oklch(0.55 0.15 40);                  /* Claude terracotta */
+  --color-primary-foreground: oklch(0.98 0.02 70);       /* 米色 */
+  --color-secondary: oklch(0.96 0.01 75);
+  --color-secondary-foreground: oklch(0.2 0 0);
+  --color-muted: oklch(0.96 0.005 70);
+  --color-muted-foreground: oklch(0.55 0.02 60);
+  --color-accent: oklch(0.96 0.01 75);
+  --color-accent-foreground: oklch(0.2 0 0);
+  --color-destructive: oklch(0.6 0.22 25);
+  --color-destructive-foreground: oklch(0.98 0 0);
+  --color-border: oklch(0.92 0.005 70);
+  --color-input: oklch(0.92 0.005 70);
+  --color-ring: oklch(0.55 0.15 40);
+
+  /* shadcn-vue 默认圆角（radius=0.5 对应 Neutral / Claude 风格） */
+  --radius: 0.5rem;
+}

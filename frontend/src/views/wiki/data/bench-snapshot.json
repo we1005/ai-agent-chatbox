@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "dataset": "CRUD-RAG mini",
+    "n_per_config": 60,
+    "judge": "DeepSeek-chat (faithfulness + answer_correctness)",
+    "generated_at": "2026-04-22 21:15:55",
+    "graph_rerun_at": "2026-04-23 02:02:48",
+    "note": "graph_* 5 档为 2026-04-23 修复 LightRAG 1.4.x parser 后的重跑数据"
+  },
+  "configs": [
+    { "name": "off",              "recallK": 0.933, "faithfulness": 0.606, "correctness": 0.679, "latency": 7.08,  "errors": 0 },
+    { "name": "multi_query",      "recallK": 0.921, "faithfulness": 0.590, "correctness": 0.625, "latency": 9.78,  "errors": 0 },
+    { "name": "agentic_grading",  "recallK": 0.897, "faithfulness": 0.583, "correctness": 0.702, "latency": 10.36, "errors": 0 },
+    { "name": "agentic_rewrite",  "recallK": 0.906, "faithfulness": 0.594, "correctness": 0.669, "latency": 12.76, "errors": 0 },
+    { "name": "agentic_full",     "recallK": 0.918, "faithfulness": 0.576, "correctness": 0.665, "latency": 14.97, "errors": 0 },
+    { "name": "graph_naive",      "recallK": 0.961, "faithfulness": 0.626, "correctness": 0.667, "latency": 19.68, "errors": 0 },
+    { "name": "graph_local",      "recallK": 0.942, "faithfulness": 0.629, "correctness": 0.651, "latency": 18.99, "errors": 0 },
+    { "name": "graph_global",     "recallK": 0.936, "faithfulness": 0.614, "correctness": 0.633, "latency": 18.31, "errors": 0 },
+    { "name": "graph_hybrid",     "recallK": 0.941, "faithfulness": 0.668, "correctness": 0.683, "latency": 17.80, "errors": 0 },
+    { "name": "graph_mix",        "recallK": 0.970, "faithfulness": null,  "correctness": null,  "latency": 17.65, "errors": 0 }
+  ],
+  "categories": [
+    {
+      "name": "kb_absent (n=5)",
+      "rows": [
+        { "config": "off",             "faithfulness": 0.176, "correctness": 0.547 },
+        { "config": "multi_query",     "faithfulness": 0.630, "correctness": 0.527 },
+        { "config": "agentic_grading", "faithfulness": 0.320, "correctness": 0.646 },
+        { "config": "agentic_rewrite", "faithfulness": 0.214, "correctness": 0.595 },
+        { "config": "agentic_full",    "faithfulness": 0.000, "correctness": 0.510 },
+        { "config": "graph_naive",     "faithfulness": 0.518, "correctness": 0.533 },
+        { "config": "graph_local",     "faithfulness": 0.568, "correctness": 0.521 },
+        { "config": "graph_global",    "faithfulness": 0.474, "correctness": 0.446 }
+      ]
+    },
+    {
+      "name": "multi_hop_2 (n=15)",
+      "rows": [
+        { "config": "off",             "recallK": 0.933, "faithfulness": 0.657, "correctness": 0.679 },
+        { "config": "multi_query",     "recallK": 0.933, "faithfulness": 0.523, "correctness": 0.587 },
+        { "config": "agentic_grading", "recallK": 0.867, "faithfulness": 0.563, "correctness": 0.686 },
+        { "config": "agentic_rewrite", "recallK": 0.900, "faithfulness": 0.599, "correctness": 0.686 },
+        { "config": "agentic_full",    "recallK": 0.900, "faithfulness": 0.522, "correctness": 0.669 }
+      ]
+    },
+    {
+      "name": "multi_hop_3 (n=15)",
+      "rows": [
+        { "config": "off",             "recallK": 0.889, "faithfulness": 0.659, "correctness": 0.643 },
+        { "config": "multi_query",     "recallK": 0.867, "faithfulness": 0.609, "correctness": 0.622 },
+        { "config": "agentic_grading", "recallK": 0.844, "faithfulness": 0.587, "correctness": 0.670 },
+        { "config": "agentic_rewrite", "recallK": 0.867, "faithfulness": 0.660, "correctness": 0.627 },
+        { "config": "agentic_full",    "recallK": 0.889, "faithfulness": 0.656, "correctness": 0.631 }
+      ]
+    }
+  ]
+}

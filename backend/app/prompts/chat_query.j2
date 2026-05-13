@@ -1,0 +1,20 @@
+{% if grouped_rag_docs %}
+<documents>
+{% for file_group in grouped_rag_docs %}
+  <document index="{{ loop.index }}">
+    <source>{{ file_group.filename | e }}</source>
+    {% for chunk in file_group.chunks %}
+    <chunk>{{ chunk.page_content | e }}</chunk>
+    {% endfor %}
+  </document>
+{% endfor %}
+</documents>
+
+{% endif %}
+{% if web_results %}
+<web_search_results>
+{{ web_results }}
+</web_search_results>
+
+{% endif %}
+<query>{{ user_query | e }}</query>

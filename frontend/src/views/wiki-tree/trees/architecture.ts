@@ -1,0 +1,96 @@
+import type { TreeModule } from './types'
+
+export const architectureTree: TreeModule = {
+  key: 'architecture',
+  title: '系统架构 · 全景',
+  caption: '前端 → 后端 → 存储 → 外部 四层纵向结构',
+  wikiLink: '/wiki/architecture',
+  root: {
+    id: 'xj',
+    label: '玄鉴',
+    sub: 'Xuanjian',
+    role: 'done',
+    desc: '会反思的知识伙伴 · 融 RAG / Agent / 长上下文 / 双时间记忆 于一体。',
+    children: [
+      {
+        id: 'fe',
+        label: '前端',
+        sub: 'Vue 3 + Tailwind v4',
+        role: 'user',
+        children: [
+          { id: 'f-chat',   label: 'ChatLayout',    sub: '主聊天界面',            role: 'user', source: 'frontend/src/components/ChatLayout.vue' },
+          { id: 'f-config', label: 'ConfigPanel',   sub: 'Solo / KB / 联网开关',   role: 'user' },
+          { id: 'f-kb',     label: 'KnowledgeBase', sub: '上传 + 模型管理',        role: 'user' },
+          { id: 'f-mem',    label: 'MemoryAudit',   sub: '记忆审计',              role: 'user' },
+          { id: 'f-home',   label: '/home · /wiki', sub: '落地页 + 技术手册',       role: 'user' },
+        ],
+      },
+      {
+        id: 'be',
+        label: '后端',
+        sub: 'FastAPI + Beanie',
+        role: 'decision',
+        children: [
+          {
+            id: 'be-chat',
+            label: 'chat_service',
+            sub: 'Classic 流水线',
+            role: 'compute',
+            source: 'backend/app/services/chat_service.py',
+            link: '/wiki/classic-pipeline',
+          },
+          {
+            id: 'be-solo',
+            label: 'solo/graph',
+            sub: 'LangGraph ReAct',
+            role: 'compute',
+            source: 'backend/app/services/solo/graph.py',
+            link: '/wiki/solo-graph',
+          },
+          {
+            id: 'be-ctx',
+            label: 'context_router',
+            sub: '7 层 + Condenser',
+            role: 'compute',
+            source: 'backend/app/services/context_router.py',
+            link: '/wiki/context-engine',
+          },
+          {
+            id: 'be-mem',
+            label: 'memory_service',
+            sub: 'reflect + Mem0 judge',
+            role: 'compute',
+            link: '/wiki/memory-lifecycle',
+          },
+          { id: 'be-agent', label: 'agentic_rag', sub: '4 档 RAG 评估循环',     role: 'compute' },
+          { id: 'be-graph', label: 'graph_rag',   sub: 'LightRAG 5 mode 适配',  role: 'compute' },
+        ],
+      },
+      {
+        id: 'st',
+        label: '本地存储',
+        sub: 'Mongo · Qdrant · LightRAG',
+        role: 'storage',
+        children: [
+          { id: 's-mongo',    label: 'MongoDB',  sub: 'conv / events / memories',  role: 'storage', source: 'backend/app/db/database.py' },
+          { id: 's-qdrant',   label: 'Qdrant',   sub: 'kb_main + mem0 · BGE-M3',    role: 'storage' },
+          { id: 's-lightrag', label: 'LightRAG', sub: 'graphml + nano-vec',         role: 'storage' },
+          { id: 's-docs',     label: 'uploads/', sub: '用户上传文档（gitignored）',  role: 'storage' },
+        ],
+      },
+      {
+        id: 'ext',
+        label: '外部服务',
+        sub: '4 LLM + 1 MCP + 1 SERP',
+        role: 'llm',
+        children: [
+          { id: 'e-ds',     label: 'DeepSeek',    sub: '主 LLM · OpenAI 兼容',  role: 'llm' },
+          { id: 'e-kimi',   label: 'Kimi',        sub: '备用',                  role: 'llm' },
+          { id: 'e-doubao', label: 'Doubao Ark',  sub: '代码模型',              role: 'llm' },
+          { id: 'e-serp',   label: 'SerpAPI',     sub: 'web search',           role: 'tool' },
+          { id: 'e-mcp',    label: '高德 MCP',    sub: 'FastMCP SSE :8001',    role: 'tool' },
+        ],
+      },
+    ],
+  },
+}

@@ -1,0 +1,50 @@
+/*
+ * Vue Flow 默认样式 + shadcn token 对齐。
+ * 在 main.ts 引入。Tailwind v4 跳过了 Preflight，所以
+ * 这里直接覆写 .vue-flow 的部分默认（它默认会做一些 button reset，
+ * 但不会和 Element Plus 冲突，因为只在 .vue-flow 里生效）。
+ */
+
+@import "@vue-flow/core/dist/style.css";
+@import "@vue-flow/core/dist/theme-default.css";
+@import "@vue-flow/controls/dist/style.css";
+@import "@vue-flow/minimap/dist/style.css";
+
+/* edge 选中/hover 高亮（默认很弱） */
+.vue-flow__edge-path {
+  stroke-width: 1.6;
+  transition: stroke-width 0.15s;
+}
+.vue-flow__edge.selected .vue-flow__edge-path,
+.vue-flow__edge:hover .vue-flow__edge-path {
+  stroke-width: 2.4;
+}
+
+/* edge label 浮卡 */
+.vue-flow__edge-text {
+  font-size: 11px;
+  fill: #475569;
+  font-weight: 500;
+}
+.vue-flow__edge-textbg {
+  fill: #ffffff;
+}
+
+/* attribution 太挡视线，弱化 */
+.vue-flow__attribution {
+  background: transparent;
+  font-size: 9px;
+  opacity: 0.4;
+}
+
+/* Controls 按钮和 minimap 用淡米色边 */
+.vue-flow__controls {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.vue-flow__minimap {
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid #e4e4e7;
+  border-radius: 8px;
+}

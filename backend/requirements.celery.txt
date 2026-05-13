@@ -1,0 +1,7 @@
+# 玄鉴 · Celery worker 容器的最小依赖（~100MB 镜像）
+# 不包含 torch / sentence-transformers / FastAPI 等重型依赖，
+# 因为 worker 只做 HTTP 转发到 backend，不持有 ML 模型。
+
+celery>=5.3.0,<6.0.0
+redis>=5.0.0,<6.0.0
+requests>=2.31.0

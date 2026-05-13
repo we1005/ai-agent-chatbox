@@ -1,0 +1,95 @@
+# Web framework
+fastapi[all]>=0.110.0
+uvicorn>=0.27.0
+python-multipart>=0.0.9
+jinja2>=3.1.4
+
+# Database
+beanie>=2.0.0
+motor>=3.3.0
+
+# Settings & env
+pydantic-settings>=2.2.0
+python-dotenv>=1.0.0
+
+# LangChain
+langchain>=1.0.0
+langchain-classic>=1.0.0
+langchain-community>=0.4.0
+langchain-openai>=1.0.0
+langchain-huggingface>=1.0.0
+langchain-chroma>=1.0.0
+langchain-text-splitters>=1.0.0
+langchain-mcp-adapters>=0.2.2
+
+
+# LangGraph
+langgraph>=1.0.0
+langgraph-checkpoint>=4.0.0
+langgraph-prebuilt>=1.0.0
+langgraph-sdk>=0.3.0
+
+# LLM / Embedding / AI
+openai>=2.0.0
+volcengine-python-sdk[ark]
+FlagEmbedding>=1.2.9
+sentence-transformers>=5.0.0
+transformers>=5.0.0
+peft>=0.18.0
+torch>=2.6.0
+torchvision
+torchaudio
+
+# Vector store
+qdrant-client>=1.12.0
+# LightRAG（Graph RAG 轻量 POC，默认关闭，见 plan-doc-dir/LightRAG集成落地.md）
+# 依赖 nano-vectordb（LightRAG 内置向量库）+ networkx（图结构）；均为 LightRAG 传递依赖，显式列出防漂移。
+lightrag-hku>=1.2,<2.0
+nano-vectordb>=0.0.4
+networkx>=3.0
+# Chroma 已迁移到 Qdrant，以下两行保留存档（业务代码不再 import，装回即可打开 data/chroma 旧库）
+chromadb>=1.0.0
+
+# Document parsing
+unstructured>=0.14.0
+pypdf>=6.0.0
+pdfplumber>=0.11.0
+docx2txt>=0.8
+python-pptx>=1.0.0
+ebooklib>=0.18
+openpyxl>=3.1.0
+xlrd>=2.0.1
+beautifulsoup4>=4.12.0
+markdown>=3.6
+sloppy-xml>=0.3.1
+
+# Data processing
+pandas>=2.0.0
+rapidfuzz>=3.0.0
+
+# Search & tools
+google-search-results>=2.4.2
+
+# Utils
+json-repair==0.*
+
+# Eval harness（scripts/ 目录使用，见 plan-doc-dir/RAG评测集落地规划.md）
+httpx>=0.27
+ragas>=0.2
+datasets>=3.0          # LongMemEval-S memory bench · ragas 的传递依赖，显式 pin 防漂移
+
+# Context Engine v2 · P3 · Durable Memory（mem0 的 ADD/UPDATE/DELETE judge）
+# 见 plan-doc-dir/长上下文机制设计v2·集百家之长.md §13.3 + §7 P3
+mem0ai>=2.0.0
+
+# Observability
+# LangSmith 作为可观测层；运行时由 LANGSMITH_TRACING 环境变量控制（默认 false 不启用）
+# 0.3+ 提供稳定的 wrap_openai / @traceable API
+langsmith>=0.3.0
+
+fastmcp
+
+# Celery 异步向量化（运行时可开关 · 默认 off · 见 analysis-for-backend/celery-module.md）
+# backend 侧只需 client 能 .delay() 即可；worker 容器另装 requirements.celery.txt
+celery>=5.3.0,<6.0.0
+redis>=5.0.0,<6.0.0

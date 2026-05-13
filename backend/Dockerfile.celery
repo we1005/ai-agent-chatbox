@@ -1,0 +1,34 @@
+# 玄鉴 · Celery worker 专用镜像（~100MB）
+#
+# 职责：
+#   - 从 Redis 取任务 → HTTP POST 到 backend /api/internal/vectorize/{file_id}
+#   - 不加载 ML 模型，不访问 MongoDB / Qdrant 直接
+#   - 仅依赖：celery / redis client / requests
+#
+# 构建：docker build -f Dockerfile.celery -t xuanjian-celery:latest .
+# 一般通过 docker-compose.celery.yml 自动构建，不用手动 build
+
+FROM python:3.13-slim
+
+# 跳过 pip cache + 不生成 .pyc 减体积
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+WORKDIR /app
+
+# 只拷依赖清单先装依赖（利用 docker layer cache）
+COPY requirements.celery.txt .
+RUN pip install -r requirements.celery.txt
+
+# 然后拷代码。docker-compose 会挂 volume 覆盖，生产构建也能独立跑
+COPY app/workers ./app/workers
+
+# 让 Celery 能 import "app.workers.celery_app"
+ENV PYTHONPATH=/app
+
+# 默认命令 = 启动 worker；可通过 docker-compose command 覆盖（如启 Flower）
+CMD ["celery", "-A", "app.workers.celery_app", "worker", \
+     "--concurrency=2", "--loglevel=info", \
+     "-Q", "xuanjian.vectorize"]

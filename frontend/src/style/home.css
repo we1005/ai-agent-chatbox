@@ -1,0 +1,207 @@
+/*
+ * /home 专属样式。仅在 .home-root 里生效，不污染其它页面。
+ * 选择器里都带 .home-root 前缀保底。
+ */
+
+/*
+ * 混排字体 `xj-serif` —— 按 Unicode 范围逐字符切换：
+ *   拉丁字符（英文 + 标点）→ Noto Serif SC（本字体含 Latin 衬线字形）
+ *   CJK 字符（汉字 + 全宽标点）→ LXGW 霞鹜文楷
+ * 两条 @font-face 同名不同 unicode-range：浏览器按每个字符的码点挑选。
+ * src 里用 local() 指向文档里已加载的 webfont（index.html <link> 已预载），
+ *   现代浏览器会在 "local() 找不到" 时继续下一条 @font-face。
+ */
+@font-face {
+  font-family: 'xj-serif';
+  font-style: normal;
+  font-weight: 100 900;
+  src: local('Noto Serif SC'), local('NotoSerifSC-Regular'), local('NotoSerifCJKsc-Regular');
+  unicode-range: U+0020-024F, U+0370-03FF, U+1E00-1EFF, U+2000-206F, U+2190-22FF, U+2460-24FF, U+25A0-25FF, U+2600-26FF;
+}
+@font-face {
+  font-family: 'xj-serif';
+  font-style: normal;
+  font-weight: 100 900;
+  src: local('LXGW WenKai Screen'), local('LXGWWenKaiScreen'), local('LXGW WenKai');
+  unicode-range: U+2E80-9FFF, U+F900-FAFF, U+FE30-FE4F, U+FF00-FFEF, U+3000-303F, U+3040-30FF;
+}
+
+.home-root {
+  --home-canvas: #fafaf7;
+  --home-ink: #14141a;
+  --home-ink-soft: #4a4a55;
+  --home-ink-mute: #8a8a95;
+  --home-line: rgba(20, 20, 26, 0.08);
+  --home-accent: oklch(0.55 0.15 40);          /* Claude terracotta, 沿用 tailwind token */
+  --home-accent-soft: oklch(0.97 0.03 50);
+  --home-seal: #b4361a;                        /* 朱砂 */
+  --home-glass-bg: rgba(255, 255, 255, 0.55);
+  --home-glass-border: rgba(255, 255, 255, 0.38);
+
+  background: var(--home-canvas);
+  color: var(--home-ink);
+  /* 用 xj-serif（上面的 unicode-range 分流）作主字体，per-char 自动选 Noto Serif SC / LXGW */
+  font-family: 'xj-serif', 'Noto Serif SC', 'LXGW WenKai Screen', -apple-system, BlinkMacSystemFont, 'STSong', 'PingFang SC', serif;
+  font-feature-settings: 'ss01', 'cv11', 'kern';
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  min-height: 100vh;
+}
+
+.home-root * { box-sizing: border-box; }
+
+/* ── Tailwind v4 无 Preflight，home 里显式重置所需元素 ── */
+.home-root h1, .home-root h2, .home-root h3,
+.home-root h4, .home-root h5, .home-root h6 {
+  margin: 0;
+  font-weight: inherit;
+  line-height: 1.1;
+}
+.home-root p { margin: 0; }
+.home-root button {
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  padding: 0;
+  appearance: none;
+}
+.home-root a { color: inherit; text-decoration: none; }
+.home-root ul, .home-root ol { list-style: none; margin: 0; padding: 0; }
+
+/* ── 字体语义类 ──
+ * 全部走 xj-serif：unicode-range 会自动把拉丁字符分到 Noto Serif SC、
+ * 中文字符分到 LXGW 霞鹜文楷。于是像 "Classic · 四路 RAG" 这种混排一行内自动切字体。
+ */
+.font-chinese-display {
+  font-family: 'xj-serif', 'LXGW WenKai Screen', 'Noto Serif SC', serif;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+.font-chinese-body {
+  font-family: 'xj-serif', 'LXGW WenKai Screen', 'Noto Serif SC', serif;
+  letter-spacing: 0.02em;
+  line-height: 1.9;
+}
+.font-english-display {
+  font-family: 'xj-serif', 'Noto Serif SC', 'Times New Roman', serif;
+  font-weight: 800;
+  letter-spacing: -0.015em;  /* 衬线字 tracking 不能像 Inter 那样压得太紧，否则字间会粘 */
+}
+.font-caps {
+  font-family: 'xj-serif', 'Noto Serif SC', 'Times New Roman', serif;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* ── 毛玻璃基础类 ── */
+.glass {
+  background: var(--home-glass-bg);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid var(--home-glass-border);
+  border-radius: 20px;
+  box-shadow: 0 10px 40px -12px rgba(20, 20, 26, 0.12),
+              0 2px 6px rgba(20, 20, 26, 0.04),
+              inset 0 1px 0 rgba(255, 255, 255, 0.6);
+}
+.glass-navbar {
+  background: rgba(250, 250, 247, 0.72);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  backdrop-filter: blur(24px) saturate(180%);
+  border-bottom: 1px solid var(--home-line);
+}
+
+/* ── Hero intro 揭幕 ── */
+@keyframes home-reveal {
+  0%   { clip-path: inset(0 100% 0 0); opacity: 0; }
+  20%  { opacity: 1; }
+  100% { clip-path: inset(0 0 0 0); opacity: 1; }
+}
+.home-reveal {
+  animation: home-reveal 900ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.home-reveal-delay-1 { animation-delay: 120ms; }
+.home-reveal-delay-2 { animation-delay: 260ms; }
+.home-reveal-delay-3 { animation-delay: 420ms; }
+
+/* ── Hero 装饰汉字浮动 ── */
+@keyframes hanzi-float {
+  0%, 100% { transform: translateY(0); opacity: 0.18; }
+  50%      { transform: translateY(-12px); opacity: 0.35; }
+}
+.hanzi-floating {
+  position: absolute;
+  font-family: 'LXGW WenKai Screen', 'STKaiti', serif;
+  font-weight: 900;
+  color: var(--home-ink);
+  pointer-events: none;
+  user-select: none;
+  animation: hanzi-float 6s ease-in-out infinite;
+}
+
+/* ── Feature 卡片 hover lift ── */
+.feature-card {
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow 220ms ease;
+}
+.feature-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 60px -16px rgba(20, 20, 26, 0.18),
+              0 2px 8px rgba(20, 20, 26, 0.04);
+}
+
+/* ── 印章（朱砂方章） ── */
+.seal {
+  color: #fff;
+  background: var(--home-seal);
+  font-family: 'LXGW WenKai Screen', 'STKaiti', serif;
+  font-weight: 700;
+  display: inline-grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+  padding: 6px;
+  border-radius: 4px;
+  letter-spacing: 0;
+  line-height: 1;
+  font-size: 20px;
+  transform: rotate(-4deg);
+  box-shadow: 0 2px 6px rgba(180, 54, 26, 0.25);
+}
+.seal > span {
+  width: 1.4em; height: 1.4em;
+  display: grid; place-items: center;
+  writing-mode: horizontal-tb;
+}
+
+/* ── 水平 marquee（tech stack 滚动条） ── */
+@keyframes marquee-x {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  animation: marquee-x 42s linear infinite;
+}
+.marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 10%, #000 90%, transparent);
+}
+
+/* ── 数字 count-up 的 tabular-nums ── */
+.tabular { font-variant-numeric: tabular-nums; }
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .home-reveal,
+  .hanzi-floating,
+  .marquee-track {
+    animation: none !important;
+  }
+  .feature-card { transition: none; }
+}
